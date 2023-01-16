@@ -20,7 +20,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "node-fetch": "^3.2.10",
-    "sparql-http-client": "^2.4.1"
+    "sparql-http-client": "^2.4.2"
   },
   "devDependencies": {
     "c8": "^7.12.0",

@@ -11,7 +11,7 @@ const defaults = {
   resourceExistsQuery: 'ASK { <${iri}> ?p ?o }', // eslint-disable-line no-template-curly-in-string
   resourceGraphQuery: 'DESCRIBE <${iri}>', // eslint-disable-line no-template-curly-in-string
   containerExistsQuery: 'ASK { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }', // eslint-disable-line no-template-curly-in-string
-  containerGraphQuery: 'CONSTRUCT { ?s a ?o. } WHERE { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }', // eslint-disable-line no-template-curly-in-string
+  containerGraphQuery: 'CONSTRUCT { ?s a ?o. } WHERE { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }' // eslint-disable-line no-template-curly-in-string
 }
 
 const authBasicHeader = (user, password) => {
@@ -37,7 +37,7 @@ export class SparqlHandler {
       this.authentication.password) {
       queryOptions.headers = {
         Authorization: authBasicHeader(this.authentication.user,
-          this.authentication.password),
+          this.authentication.password)
       }
     }
 
@@ -63,7 +63,7 @@ export class SparqlHandler {
   async exists (iri, query) {
     debug('SPARQL exists query for IRI <' + iri + '> : ' + query)
     try {
-      const exists = this.parsingClient.query.ask(query,
+      const exists = await this.parsingClient.query.ask(query,
         this.buildQueryOptions())
       return { exists, status: 200 }
     } catch (error) {
@@ -78,13 +78,13 @@ export class SparqlHandler {
     queryOptions.accept = accept
 
     try {
-      const stream = await this.streamClient.query.construct(query, {headers:queryOptions})
+      const stream = await this.streamClient.query.construct(query, { headers: queryOptions })
       return {
-        status: 200, stream,
+        status: 200, stream
       }
     } catch (error) {
       return {
-        status: error.status,
+        status: error.status
       }
     }
   }
@@ -139,7 +139,7 @@ export const factory = trifid => {
 
   return (req, res, next) => {
     const handler = new SparqlHandler({
-      ...defaults, ...config, endpointUrl: new URL(endpoint, req.absoluteUrl()),
+      ...defaults, ...config, endpointUrl: new URL(endpoint, req.absoluteUrl())
     })
     handler.handle(req, res, next)
   }
