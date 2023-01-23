@@ -11,7 +11,7 @@ const defaults = {
   resourceExistsQuery: 'ASK { <${iri}> ?p ?o }', // eslint-disable-line no-template-curly-in-string
   resourceGraphQuery: 'DESCRIBE <${iri}>', // eslint-disable-line no-template-curly-in-string
   containerExistsQuery: 'ASK { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }', // eslint-disable-line no-template-curly-in-string
-  containerGraphQuery: 'CONSTRUCT { ?s a ?o. } WHERE { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }', // eslint-disable-line no-template-curly-in-string
+  containerGraphQuery: 'CONSTRUCT { ?s a ?o. } WHERE { ?s a ?o. FILTER REGEX(STR(?s), "^${iri}") }' // eslint-disable-line no-template-curly-in-string
 }
 
 const authBasicHeader = (user, password) => {
@@ -37,7 +37,7 @@ export class SparqlHandler {
       this.authentication.password) {
       queryOptions.headers = {
         Authorization: authBasicHeader(this.authentication.user,
-          this.authentication.password),
+          this.authentication.password)
       }
     }
 
@@ -79,7 +79,7 @@ export class SparqlHandler {
 
     const response = await this.simpleClient.query.construct(query, { headers })
     return {
-      status: response.status, stream: response.body,
+      status: response.status, stream: response.body
     }
   }
 
@@ -158,7 +158,7 @@ export const factory = trifid => {
 
   return (req, res, next) => {
     const handler = new SparqlHandler({
-      ...defaults, ...config, endpointUrl: new URL(endpoint, req.absoluteUrl()),
+      ...defaults, ...config, endpointUrl: new URL(endpoint, req.absoluteUrl())
     })
     handler.handle(req, res, next)
   }
