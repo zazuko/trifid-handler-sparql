@@ -97,7 +97,7 @@ export class SparqlHandler {
   async head (_req, res, next, iri) {
     iri = encodeURI(iri)
 
-    debug('handle OPTIONS request for IRI <' + iri + '>')
+    debug('handle HEAD request for IRI <' + iri + '>')
 
     const isContainer = this.resourceNoSlash && iri.endsWith('/')
     const queryExist = isContainer
