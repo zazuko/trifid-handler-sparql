@@ -78,8 +78,15 @@ export class SparqlHandler {
     headers.accept = accept
 
     const response = await this.simpleClient.query.construct(query, { headers })
+    response.headers.forEach((value, name) => {
+      // stream will be decoded by the client -> remove content-encoding header
+      if (name === 'content-encoding') {
+        return
+      }
+      headers[name] = value
+    })
     return {
-      status: response.status, stream: response.body
+      status: response.status, stream: response.body, headers
     }
   }
 
@@ -138,13 +145,16 @@ export class SparqlHandler {
         ? this.buildContainerGraphQuery(iri)
         : this.buildResourceGraphQuery(iri)
 
-      const { status, stream } = await this.graphStream(iri, query,
+      const { status, stream, headers } = await this.graphStream(iri, query,
         req.headers.accept)
 
       if (!stream) {
         return next()
       }
       res.status(status)
+      Object.keys(headers).forEach(name => {
+        res.setHeader(name, headers[name])
+      })
       stream.pipe(res)
     }
   }
